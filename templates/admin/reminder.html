@@ -1,0 +1,13 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="{% url 'admin:index' %}">Home</a> › <a href="{% url 'admin:kitchen_fridges' %}">Users’ fridges</a> › <a href="{% url 'admin:kitchen_fridge' owner.pk %}">{{ owner.username }}</a> › Review expiry reminder</div>{% endblock %}
+{% block content %}
+<section class="fw-email-panel">
+<p class="fw-description">{% if reminder.is_preview %}Local preview mode: this button saves an email to the outbox folder. It does not send to an inbox. Restart with start-gmail.ps1 to use Gmail.{% else %}Send through the configured email server only when you click the button below.{% endif %}</p>
+<dl class="fw-email-meta"><dt>To</dt><dd>{{ reminder.recipient|default:'No email address set' }} ({{ owner.username }})</dd><dt>From</dt><dd>{{ reminder.sender }}</dd><dt>Subject</dt><dd>{{ reminder.subject }}</dd><dt>Includes</dt><dd>{{ reminder.items|length }} ingredient{{ reminder.items|length|pluralize }} within {{ reminder.reminder_days }} day{{ reminder.reminder_days|pluralize }} of expiry, including past-date items</dd></dl>
+{% if reminder.reason %}<div class="fw-email-notice" role="status">{{ reminder.reason }}</div>{% endif %}
+{% if reminder.items %}<pre class="fw-email-body">{{ reminder.body }}</pre>{% else %}<p class="fw-description">There is nothing to include in this reminder.</p>{% endif %}
+<form method="post" class="fw-actions" id="send-reminder-form">{% csrf_token %}<input type="hidden" name="confirmation" value="{{ confirmation }}"><button class="fw-button" type="submit" {% if reminder.reason %}disabled{% endif %}>{% if reminder.is_preview %}Save email preview{% else %}Send expiry reminder{% endif %}</button><a class="fw-button fw-button-light" href="{% url 'admin:kitchen_fridge' owner.pk %}">Back to fridge</a></form>
+<p class="fw-description" style="margin-top:18px">A reminder is limited to one email per user per day. Local previews have a separate daily limit.</p>
+</section>
+<script>document.getElementById('send-reminder-form').addEventListener('submit', function(){const button=this.querySelector('button[type="submit"]');button.disabled=true;button.textContent='Processing…';});</script>
+{% endblock %}

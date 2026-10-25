@@ -1,0 +1,6 @@
+{% extends "admin/index.html" %}
+{% block content %}
+<section class="fw-admin-hero"><div><p class="fw-kicker">YOUR KITCHEN PLATFORM</p><h2>A little oversight. A lot of fresh ideas.</h2><p>Look inside users’ fridges and grow the recipe collection.</p></div><div class="fw-actions">{% if perms.kitchen.view_ingredient %}<a class="fw-button" href="{% url 'admin:kitchen_fridges' %}">Browse users’ fridges →</a>{% endif %}{% if perms.kitchen.add_recipe %}<a class="fw-button fw-button-light" href="{% url 'admin:kitchen_recipe_add' %}">+ Add a recipe</a>{% endif %}</div></section>
+<div class="fw-stats">{% if kitchen_summary %}<a href="{% url 'admin:kitchen_fridges' %}"><span>Registered users</span><strong>{{ kitchen_summary.users }}</strong></a><a href="{% url 'admin:kitchen_ingredient_changelist' %}"><span>Ingredients in all fridges</span><strong>{{ kitchen_summary.ingredients }}</strong></a><div><span>Past-date ingredients</span><strong>{{ kitchen_summary.expired }}</strong></div>{% endif %}{% if perms.kitchen.view_recipe %}<a href="{% url 'admin:kitchen_recipe_changelist' %}"><span>Recipes in the collection</span><strong>{{ recipe_count }}</strong></a>{% endif %}</div>
+{{ block.super }}
+{% endblock %}

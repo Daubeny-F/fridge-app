@@ -1,0 +1,14 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#203d32"><title>{% if signup %}Create an account{% else %}Welcome back{% endif %} · Fridgewise</title><link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml"><link rel="stylesheet" href="{% static 'styles.css' %}"></head>
+<body class="auth-page">{% include 'icons.html' %}
+<main class="auth-layout">
+<section class="auth-story"><a class="brand" href="/"><span class="brand-mark"><svg class="icon"><use href="#i-leaf"/></svg></span>fridgewise<span class="brand-dot">.</span></a><div class="auth-story-content"><span class="eyebrow">A LITTLE LESS WASTE. A LOT MORE TASTE.</span><h1>Your fridge has<br>good things<br>in store.</h1><p>Turn the ingredients you already have into your next favorite meal.</p><img src="{% static 'art/hero.svg' %}" alt="Illustrated plate of fresh vegetables" class="auth-art"></div><div class="auth-foot">Your everyday kitchen companion.</div></section>
+<section class="auth-form-panel"><div class="auth-form-wrap"><span class="eyebrow green">LET’S GET COOKING</span><h2>{% if signup %}A fresh start.{% else %}Welcome back.{% endif %}</h2><p class="muted">{% if signup %}Create your account. Make more of what’s in your fridge.{% else %}Your next good meal is already in your fridge.{% endif %}</p>
+<form method="post" class="auth-form">{% csrf_token %}
+{% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+{% for field in form %}<div class="field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.errors %}<div class="field-error">{{ field.errors }}</div>{% endif %}{% if signup and field.name == 'password1' %}<small>Use at least 8 characters. Avoid common passwords.</small>{% endif %}</div>{% endfor %}
+<button class="btn primary auth-submit" type="submit">{% if signup %}Create account{% else %}Sign in{% endif %}<svg class="icon"><use href="#i-arrow"/></svg></button></form>
+<p class="auth-switch">{% if signup %}Already part of the kitchen? <a href="{% url 'login' %}">Sign in</a>{% else %}New around here? <a href="{% url 'signup' %}">Create an account</a>{% endif %}</p>
+{% if not signup %}<div class="demo-hint"><svg class="icon"><use href="#i-chef"/></svg><div><strong>Just taking a look?</strong><p>Try the lab demo: <b>demo</b> / <b>FreshStart!2026</b></p></div><button type="button" class="text-btn" id="fill-demo">Fill in</button></div><script>document.getElementById('fill-demo').addEventListener('click',()=>{document.getElementById('id_username').value='demo';document.getElementById('id_password').value='FreshStart!2026';});</script>{% endif %}
+<p class="auth-note"><svg class="icon"><use href="#i-leaf"/></svg>Small kitchen habits. A fresher tomorrow.</p></div></section>
+</main></body></html>

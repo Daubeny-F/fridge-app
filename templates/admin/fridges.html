@@ -1,0 +1,10 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="{% url 'admin:index' %}">Home</a> › Users’ fridges</div>{% endblock %}
+{% block content %}
+<p class="fw-description">Choose a user to see their ingredients, quantities, and expiry dates. Empty fridges are included.</p>
+<form class="fw-search" method="get"><label for="user-search">Find a user</label><input id="user-search" name="q" value="{{ query }}" placeholder="Username or name" maxlength="150"><button class="fw-button" type="submit">Search</button>{% if query %}<a href="{% url 'admin:kitchen_fridges' %}">Clear search</a>{% endif %}</form>
+<div class="fw-table-wrap"><table class="fw-table"><thead><tr><th>User</th><th>Name</th><th>Account</th><th>Ingredients</th><th>Past date</th><th>Fridge</th></tr></thead><tbody>
+{% for owner in page_obj %}<tr><td><strong>{{ owner.username }}</strong></td><td>{{ owner.get_full_name|default:'—' }}</td><td>{% if owner.is_active %}<span class="fw-pill">Active</span>{% else %}<span class="fw-pill fw-warn">Inactive</span>{% endif %}</td><td>{{ owner.ingredient_count }}</td><td>{{ owner.expired_count }}</td><td><a class="fw-button fw-button-light" href="{% url 'admin:kitchen_fridge' owner.pk %}">View fridge →</a></td></tr>{% empty %}<tr><td colspan="6" class="fw-empty">No users match your search.</td></tr>{% endfor %}
+</tbody></table></div>
+{% include 'admin/kitchen_pagination.html' %}
+{% endblock %}

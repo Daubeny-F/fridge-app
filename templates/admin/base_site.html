@@ -1,0 +1,5 @@
+{% extends "admin/base.html" %}{% load static %}
+{% block title %}{{ title }} | Fridgewise admin{% endblock %}
+{% block branding %}<div id="site-name"><a href="{% url 'admin:index' %}" class="fw-brand"><img src="{% static 'favicon.svg' %}" width="30" height="30" alt="">fridgewise<span>administration</span></a></div>{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'admin.css' %}">{% endblock %}
+{% block nav-global %}{% endblock %}
